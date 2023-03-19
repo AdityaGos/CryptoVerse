@@ -1,0 +1,47 @@
+import React from 'react';
+import millify from 'millify';
+import {Link} from 'react-router-dom';
+import {Typography,Row,Col,Statistic} from 'antd';
+import { useGetCryptosQuery } from '../services/cryptoApi';
+import { Cryptocurrencies,News } from '../components';
+const {Title}= Typography;
+
+const Homepage = () => {
+ 
+
+  const {data,isFetching}= useGetCryptosQuery(10);
+
+  const globalStats=data?.data?.stats;
+  if(isFetching) return 'loading...';
+  return <>
+    <Title level={2} className="heading">Global Crypto Stats</Title>
+    <Row>
+      
+    <Col span={12}><Statistic title="Total Cryptocurrencies" value={globalStats.total} /></Col>
+    <Col span={12}><Statistic title="Total Exchanges" value={globalStats.totalExchanges} /></Col>
+        <Col span={12}><Statistic title="Total Market Cap:" value={`$${millify(globalStats.totalMarketCap)}`} /></Col>
+        <Col span={12}><Statistic title="Total 24h Volume" value={millify(globalStats.total24hVolume)} /></Col>
+        <Col span={12}><Statistic title="Total Cryptocurrencies" value={globalStats.totalCoins} /></Col>
+        <Col span={12}><Statistic title="Total Markets" value={globalStats.totalMarkets}/></Col>
+      
+
+  
+  
+    </Row>
+    <div className="home-heading-container">
+      <Title level={2} className="home-title">Top 10 Crptocurrencies in world</Title>
+      <Title level={2} className="home-title"><Link to="/cryptocurrencies">Show More</Link></Title>
+   
+    </div>
+    <Cryptocurrencies simplified />
+    <div className="home-heading-container">
+      <Title level={2} className="home-title">Lastest Crptocurrencies News</Title>
+      <Title level={2} className="home-title"><Link to="/news">Show More</Link></Title>
+   
+    </div>
+    <News simplified/>
+  
+  </>
+};
+
+export default Homepage;
